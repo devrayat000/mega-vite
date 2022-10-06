@@ -1,17 +1,23 @@
 {
   "name": "eslint-config-custom",
   "version": "0.0.0",
-  "main": "index.js",
   "license": "MIT",
+  "exports": {
+    ".": "./index.js",
+    "./vite": "./vite.js"
+  },
   "dependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.39.0",
     "eslint": "^7.23.0",
-    "eslint-config-next": "^12.0.8",
-    "eslint-config-prettier": "^8.3.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-config-react-app": "^7.0.1",
     "eslint-config-turbo": "latest",
-    "eslint-plugin-react": "7.31.8"
+    "eslint-plugin-jsx-a11y": "^6.6.1",
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-simple-import-sort": "^8.0.0"
   },
   "devDependencies": {
-    "typescript": "^4.7.4"
+    "typescript": "^4.8.4"
   },
   "publishConfig": {
     "access": "public"

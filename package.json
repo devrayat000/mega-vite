@@ -4,11 +4,13 @@
   "private": true,
   "workspaces": [
     "apps/*",
+    "remotes/*",
     "packages/*"
   ],
   "scripts": {
     "build": "turbo run build",
     "dev": "turbo run dev --parallel",
+    "preview": "turbo run preview --parallel",
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\""
   },
