@@ -1,0 +1,29 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply prose max-w-full;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  p,
+  img {
+    @apply my-0;
+  }
+
+  ul,
+  ol {
+    @apply list-none;
+  }
+
+  input[type="time"]::-webkit-calendar-picker-indicator {
+    filter: brightness(0) saturate(100%) invert(35%) sepia(77%) saturate(1930%) hue-rotate(225deg) brightness(98%) contrast(94%);
+  }
+}

@@ -37,6 +37,10 @@ module.exports = {
     "react/prop-types": "off",
     "@typescript-eslint/explicit-function-return-type": "off",
     "@typescript-eslint/consistent-type-imports": "warn",
+    "@typescript-eslint/no-use-before-define": "off",
+    "@typescript-eslint/ban-ts-comment": "off",
+    "@typescript-eslint/no-non-null-assertion": "off",
+    "@typescript-eslint/no-non-null-asserted-optional-chain": "off",
     "react/jsx-filename-extension": [1, { extensions: [".jsx", ".tsx"] }],
     "simple-import-sort/imports": "warn",
     "simple-import-sort/exports": "warn",
@@ -44,7 +48,11 @@ module.exports = {
     "react/function-component-definition": [
       2,
       {
-        namedComponents: "function-declaration",
+        namedComponents: [
+          "function-declaration",
+          "function-expression",
+          "arrow-function",
+        ],
       },
     ],
     "jsx-a11y/anchor-is-valid": [

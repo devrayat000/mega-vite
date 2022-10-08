@@ -1,0 +1,19 @@
+schema: 
+  - https://swapi-graphql.netlify.app/.netlify/functions/index
+  - "./base.graphql"
+documents: src/**/*.{ts,tsx}
+
+extensions:
+  codegen:
+    schema:
+      - https://swapi-graphql.netlify.app/.netlify/functions/index
+      - "./base.graphql"
+    documents: src/**/*.{ts,tsx}
+
+    generates:
+      src/types/graphql.generated.ts:
+        plugins:
+          - typescript
+          - typescript-operations
+
+  
