@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import dayjs from "dayjs";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, m as motion } from "framer-motion";
 import { useMemo, useState } from "react";
 import useMeasure from "react-use-measure";
 

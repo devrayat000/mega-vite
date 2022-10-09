@@ -9,7 +9,6 @@ function App() {
   const today = dayjs().startOf("day");
   const [selectedDay, setSelectedDay] = useState(today);
   const [currentMonth, setCurrentMonth] = useState(today.format("MMM-YYYY"));
-  const firstDayOfCurrentMonth = dayjs(new Date(currentMonth)).startOf("month");
 
   function next() {
     const firstDayOfNextMonth = dayjs(currentMonth).add(1, "month");

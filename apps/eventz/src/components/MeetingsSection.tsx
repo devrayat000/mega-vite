@@ -1,5 +1,5 @@
 import dayjs from "dayjs";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, m as motion } from "framer-motion";
 
 import { useEventStore } from "../store/eventStore";
 import AddMeeting from "./AddMeeting";
