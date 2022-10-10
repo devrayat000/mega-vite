@@ -1,20 +1,14 @@
 import dayjs from "dayjs";
 import { AnimatePresence, m as motion } from "framer-motion";
+import { useCallback } from "react";
 
 import { useEventStore } from "../store/eventStore";
 import AddMeeting from "./AddMeeting";
 import { container } from "./animation";
 import Meeting from "./Meeting";
 
-const MeetingsSection = ({
-  selectedDay,
-}: {
-  selectedDay: string | number | Date | dayjs.Dayjs;
-}) => {
-  const meetings = useEventStore((store) => store.events);
-  const selectedDayMeetings = meetings.filter((meeting) =>
-    dayjs(meeting.startDatetime).isSame(selectedDay, "date")
-  );
+const MeetingsSection = () => {
+  const selectedDay = useEventStore((store) => store.day);
 
   return (
     <section className="mt-12 md:mt-0 md:pl-14">
@@ -36,18 +30,34 @@ const MeetingsSection = ({
         animate="show"
         exit="hidden"
       >
-        {selectedDayMeetings.length > 0 ? (
-          <AnimatePresence mode="wait">
-            {selectedDayMeetings.map((meeting, i) => (
-              <Meeting key={meeting.id} meeting={meeting} />
-            ))}
-          </AnimatePresence>
-        ) : (
-          <p>No meetings today.</p>
-        )}
+        <Meetings />
       </motion.ol>
     </section>
   );
 };
 
 export default MeetingsSection;
+
+export const Meetings = () => {
+  const selectedDayMeetings = useEventStore(
+    useCallback(
+      (store) =>
+        store.events.filter((meeting) =>
+          dayjs(meeting.startDatetime).isSame(store.day, "date")
+        ),
+      []
+    )
+  );
+
+  if (selectedDayMeetings.length <= 0) {
+    return <p>No meetings today.</p>;
+  }
+
+  return (
+    <AnimatePresence mode="wait">
+      {selectedDayMeetings.map((meeting, i) => (
+        <Meeting key={meeting.id} meeting={meeting} />
+      ))}
+    </AnimatePresence>
+  );
+};

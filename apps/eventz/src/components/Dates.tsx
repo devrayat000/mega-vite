@@ -3,19 +3,17 @@ import dayjs from "dayjs";
 import { AnimatePresence, m as motion } from "framer-motion";
 import { useMemo, useState } from "react";
 import useMeasure from "react-use-measure";
+import shallow from "zustand/shallow";
 
 import { useEventStore } from "../store/eventStore";
 
-export type DatesProp = {
-  onSelect(date: dayjs.Dayjs): void;
-  selectedDay: string | number | Date | dayjs.Dayjs;
-  currentMonth: string | number | Date | dayjs.Dayjs;
-};
+export type DatesProp = unknown;
 
-const Dates = ({ onSelect, selectedDay, currentMonth }: DatesProp) => {
+const Dates = (_props: DatesProp) => {
+  const currentMonth = useEventStore((store) => store.month);
   const previousMonth = usePrevious(dayjs(currentMonth).format("MMM-YYYY"));
   const [containerRef, { width }] = useMeasure();
-  const meetings = useEventStore((store) => store.events);
+
   const days = useMemo(
     () =>
       Array.from(new Array(dayjs(currentMonth).daysInMonth()).keys()).map((i) =>
@@ -45,52 +43,11 @@ const Dates = ({ onSelect, selectedDay, currentMonth }: DatesProp) => {
           style={{ width }}
         >
           {days.map((day, dayIdx) => (
-            <li
+            <DateItem
               key={day.format("DD-MMM-YYYY")}
               className={clsx(dayIdx === 0 && colStartClasses[day.weekday()])}
-            >
-              <button
-                type="button"
-                onClick={() => onSelect(day)}
-                className={clsx(
-                  dayjs(day).isSame(selectedDay, "date") && "text-white",
-                  !dayjs(day).isSame(selectedDay, "date") &&
-                    dayjs(day).isToday() &&
-                    "text-red-500",
-                  !dayjs(day).isSame(currentMonth, "date") &&
-                    !dayjs(day).isToday() &&
-                    dayjs(day).isSame(currentMonth, "month") &&
-                    "text-gray-900",
-                  !dayjs(day).isSame(currentMonth, "date") &&
-                    !dayjs(day).isToday() &&
-                    !dayjs(day).isSame(currentMonth, "month") &&
-                    "text-gray-400",
-                  dayjs(day).isSame(selectedDay, "date") &&
-                    dayjs(day).isToday() &&
-                    "bg-red-500",
-                  dayjs(day).isSame(selectedDay, "date") &&
-                    !dayjs(day).isToday() &&
-                    "bg-gray-900",
-                  !dayjs(day).isSame(selectedDay, "date") &&
-                    dayjs(day).isToday() &&
-                    "hover:bg-red-100",
-                  !dayjs(day).isSame(selectedDay, "date") &&
-                    "hover:bg-gray-200",
-                  (dayjs(day).isSame(selectedDay, "date") ||
-                    dayjs(day).isSame(selectedDay, "date")) &&
-                    "font-semibold",
-                  meetings.some((meeting) =>
-                    dayjs(meeting.startDatetime).isSame(day, "date")
-                  ) &&
-                    "before:h-2 before:w-2 before:rounded-full before:bg-blue-500 before:absolute before:top-0 before:right-0",
-                  "mx-auto flex h-8 w-8 items-center justify-center rounded-full select-none relative"
-                )}
-              >
-                <time dateTime={dayjs(day).format("YYYY-MM-DD")}>
-                  {dayjs(day).format("D")}
-                </time>
-              </button>
-            </li>
+              day={day}
+            />
           ))}
         </motion.ol>
       </AnimatePresence>
@@ -100,6 +57,55 @@ const Dates = ({ onSelect, selectedDay, currentMonth }: DatesProp) => {
 
 export default Dates;
 
+type DateItemProps = React.ComponentPropsWithRef<"li"> & {
+  day: dayjs.Dayjs;
+};
+
+function setDate(day: dayjs.Dayjs) {
+  useEventStore.setState({ day });
+}
+
+export const DateItem = ({ day, ...props }: DateItemProps) => {
+  const [isSameDay, isSameMonth, hasMeeting] = useEventStore(
+    (store) => [
+      dayjs(day).isSame(store.day, "date"),
+      dayjs(day).isSame(store.month, "month"),
+      store.events.some((meeting) =>
+        dayjs(meeting.startDatetime).isSame(day, "date")
+      ),
+    ],
+    shallow
+  );
+  const isToday = dayjs(day).isToday();
+
+  return (
+    <li {...props}>
+      <button
+        type="button"
+        onClick={() => setDate(day)}
+        className={clsx(
+          isSameDay && "text-white",
+          !isSameDay && isToday && "text-red-500",
+          !isToday && isSameMonth && "text-gray-900",
+          !isToday && !isSameMonth && "text-gray-400",
+          isSameDay && isToday && "bg-red-500",
+          isSameDay && !isToday && "bg-gray-900",
+          !isSameDay && isToday && "hover:bg-red-100",
+          !isSameDay && "hover:bg-gray-200",
+          (isSameDay || isSameDay) && "font-semibold",
+          hasMeeting &&
+            "before:h-2 before:w-2 before:rounded-full before:bg-blue-500 before:absolute before:top-0 before:right-0",
+          "mx-auto flex h-8 w-8 items-center justify-center rounded-full select-none relative"
+        )}
+      >
+        <time dateTime={dayjs(day).format("YYYY-MM-DD")}>
+          {dayjs(day).format("D")}
+        </time>
+      </button>
+    </li>
+  );
+};
+
 function usePrevious<T>(state: T) {
   const [tuple, setTuple] = useState([null, state]);
 
@@ -108,13 +114,21 @@ function usePrevious<T>(state: T) {
   }
   return tuple[0];
 }
+
+type SlideProps = {
+  direction: -1 | 1;
+  width: number;
+};
 const slide = {
-  enter: ({ direction, width }: any) => ({
+  enter: ({ direction, width }: SlideProps) => ({
     opacity: 0,
-    x: direction * width,
+    x: -direction * width,
   }),
   stay: { x: 0, opacity: 1 },
-  exit: ({ direction, width }: any) => ({ x: -direction * width, opacity: 0 }),
+  exit: ({ direction, width }: SlideProps) => ({
+    x: direction * width,
+    opacity: 0,
+  }),
 };
 
 const colStartClasses = [

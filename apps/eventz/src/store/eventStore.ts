@@ -1,3 +1,4 @@
+import dayjs from "dayjs";
 import createStore from "zustand";
 
 export const initialEvents = [
@@ -45,11 +46,25 @@ export const initialEvents = [
 
 type Event = typeof initialEvents[number];
 type EventStore = {
+  day: dayjs.Dayjs;
+  month: dayjs.Dayjs;
+  previous(): void;
+  next(): void;
   events: Event[];
   add(newEvent: Event): void;
 };
 
-export const useEventStore = createStore<EventStore>((set) => ({
+export const useEventStore = createStore<EventStore>((set, get) => ({
+  day: dayjs().startOf("day"),
+  get month() {
+    return get().day.startOf("month");
+  },
+  next() {
+    set((prev) => ({ ...prev, month: prev.month.add(1, "month") }));
+  },
+  previous() {
+    set((prev) => ({ ...prev, month: prev.month.subtract(1, "month") }));
+  },
   events: initialEvents,
   add(newEvent) {
     set((prev) => ({
