@@ -1,11 +1,12 @@
 import dayjs from "dayjs";
 import { AnimatePresence, m as motion } from "framer-motion";
-import { useCallback } from "react";
+import { lazy, Suspense, useCallback } from "react";
 
 import { useEventStore } from "../store/eventStore";
 import AddMeeting from "./AddMeeting";
 import { container } from "./animation";
-import Meeting from "./Meeting";
+
+const Meeting = lazy(() => import("./Meeting"));
 
 const MeetingsSection = () => {
   const selectedDay = useEventStore((store) => store.day);
@@ -56,7 +57,9 @@ export const Meetings = () => {
   return (
     <AnimatePresence mode="wait">
       {selectedDayMeetings.map((meeting, i) => (
-        <Meeting key={meeting.id} meeting={meeting} />
+        <Suspense key={meeting.id} fallback={<p>Loading...</p>}>
+          <Meeting meeting={meeting} />
+        </Suspense>
       ))}
     </AnimatePresence>
   );
