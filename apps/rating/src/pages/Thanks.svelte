@@ -18,7 +18,7 @@
 </div>
 
 <section class="mt-3.5">
-  <h3 class="text-white text-2xl text-center">Thank you!</h3>
+  <h3 class="text-white text-2xl text-center font-bold">Thank you!</h3>
   <p class="text-medium-gray text-sm mt-2.5 text-center">
     We appreciate you taking the time to give a rating. If you ever need more
     support, don’t hesitate to get in touch!

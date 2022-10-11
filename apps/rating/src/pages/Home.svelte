@@ -7,7 +7,7 @@
 </span>
 
 <section class="mt-3.5">
-  <h3 class="text-white text-2xl">How did we do?</h3>
+  <h3 class="text-white text-2xl font-bold">How did we do?</h3>
   <p class="text-medium-gray text-sm mt-2.5">
     Please let us know how we did with your support request. All feedback is
     appreciated to help us improve our offering!
