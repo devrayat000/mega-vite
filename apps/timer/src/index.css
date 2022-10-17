@@ -1,0 +1,19 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {    
+    .container {
+        background: no-repeat bottom right / 200% theme(backgroundImage.hills),
+            theme(backgroundImage.stars),
+            theme(colors.blue.dark);
+    }
+
+    @media screen and (min-width: theme(screens.sm)) {
+        .container {
+            background: no-repeat bottom / 100% theme(backgroundImage.hills),
+                theme(backgroundImage.stars),
+                theme(colors.blue.dark);
+        }
+    }
+}
