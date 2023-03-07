@@ -13,6 +13,8 @@ module.exports = {
       },
       backgroundImage: {
         hero: "url('./src/assets/hero-bg.svg')",
+        gradient:
+          "url('https://res.cloudinary.com/braydoncoyer/image/upload/v1642953750/glowing_gradient_background_tailwind_banner.jpg')",
       },
       maxWidth: {
         title: "8ch",

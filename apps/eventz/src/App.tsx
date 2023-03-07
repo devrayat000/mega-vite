@@ -9,7 +9,7 @@ function App() {
   const currentMonth = useEventStore((store) => store.month);
 
   return (
-    <div className="min-h-screen grid place-items-center bg-gradient-to-br from-rose-300 via-purple-200 to-cyan-200">
+    <div className="min-h-screen grid place-items-center bg-gradient bg-cover">
       <div className="max-w-md py-6 px-4 mx-auto sm:px-7 md:max-w-5xl md:px-9 rounded-xl bg-white/30 backdrop-blur-sm border border-white/20 shadow shadow-white/40">
         <h1 className="text-center">Organize Meetings with Ease</h1>
         <div className="md:grid md:grid-cols-2 md:divide-x md:divide-gray-200 mt-10">
